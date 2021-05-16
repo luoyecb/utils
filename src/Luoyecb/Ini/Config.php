@@ -3,11 +3,13 @@ namespace Luoyecb\Ini;
 
 use \ArrayAccess;
 use \Exception;
+use \IteratorAggregate;
+use \Traversable;
 
 /**
  * Parser for .ini file
  */
-class Config implements ArrayAccess {
+class Config implements ArrayAccess, IteratorAggregate {
 	private $parser;
 	private $process_sections;
 
@@ -25,6 +27,16 @@ class Config implements ArrayAccess {
 			throw new Exception("{$filename} not exist.");
 		}
 		return new Config(file_get_contents($filename), $process_sections);
+	}
+
+	public function getIterator(): Traversable {
+		return $this->getGenerator();
+	}
+
+	private function getGenerator() {
+		foreach ($this->getAll() as $k => $v) {
+			yield $k => $v;
+		}
 	}
 
 	public function get(string $key, $section = NULL) {

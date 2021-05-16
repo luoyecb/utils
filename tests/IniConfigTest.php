@@ -177,4 +177,15 @@ class IniConfigTest extends TestCase {
 		$this->assertFalse(isset($config['unexists_section.unexists_key']));
 	}
 
+	public function testIterator() {
+		$cfgs = [];
+		foreach ($this->config as $key => $val) {
+			// var_dump($key);
+			// var_dump($val);
+			$cfgs[$key] = $val;
+		}
+
+		$this->assertSame($this->config->getAll(), $cfgs);
+	}
+
 }
